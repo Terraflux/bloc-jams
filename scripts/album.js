@@ -30,6 +30,21 @@ var albumMarconi = {
     ]
 };
 
+var albumUrbina = {
+    name: 'Singularity',
+    artist: 'Pedro Urbina',
+    label: 'Upstairs',
+    year: '2099',
+    albumArtUrl: '#',
+    songs: [
+    { name: 'Discovery', length: '3:33'},
+    { name: 'Synthesis', length: '4:44'},
+    { name: 'Induction', length: '5:55'}
+    ]
+};
+
+var albums = [albumPicasso, albumMarconi, albumUrbina]
+
 var createSongRow = function(songNumber, songName, songLength){
     var template =
         '<tr class="album-view-song-item">'
@@ -41,6 +56,14 @@ var createSongRow = function(songNumber, songName, songLength){
 
     return template;
 };
+
+var currentAlbum;
+
+var setNextAlbum = function(currentAlbum){
+    var currentAlbumNumber = albums.indexOf(currentAlbum);
+    var nextAlbum = albums[(currentAlbumNumber + 1) % albums.length];
+    setCurrentAlbum(nextAlbum);
+}
 
 var setCurrentAlbum = function(album){
     var albumTitle = document.getElementsByClassName('album-view-title')[0];
@@ -59,8 +82,12 @@ var setCurrentAlbum = function(album){
     for (i = 0; i < album.songs.length; i++){
         albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].name, album.songs[i].length);
     }
+
+    currentAlbum = album;
 };
 
 window.onload = function(){
     setCurrentAlbum(albumPicasso);
 };
+
+document.getElementsByClassName('album-cover-art')[0].addEventListener("click", setNextAlbum(currentAlbum));
