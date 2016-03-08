@@ -3,7 +3,7 @@ var createSongRow = function(songNumber, songName, songLength){
         '<tr class="album-view-song-item">'
        +'   <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>'
        +'   <td class="song-item-title">' + songName + '</td>'
-       +'   <td class="song-item-duration">' + songLength + '</td>'
+       +'   <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>'
        +'</tr>'
        ;
 
@@ -99,7 +99,13 @@ var updatePlayerBarSong = function(){
     $('.currently-playing .artist-name').text(currentAlbum.artist);
     $('.currently-playing .artist-song-mobile').text(currentSongFromAlbum.name + " - " + currentAlbum.artist);
     $('.main-controls .play-pause').html(playerBarPauseButton)
-}
+
+    var setTotalTimeInPlayerBar = function(totalTime){
+        var $totalTimeCell = $('.total-time');
+        $totalTimeCell = filterTimeCode(currentSoundFile.getDuration());
+    };
+
+};
 
 var trackIndex = function(album, song){
     return album.songs.indexOf(song);
@@ -164,6 +170,10 @@ var setVolume = function(volume) {
     }
 };
 
+var filterTimeCode = function(timeInSeconds){
+    buzz.toTimer(timeInSeconds);
+};
+
 var togglePlayFromPlayerBar = function(){
     var $currentlyPlayingCell = getSongNumberCell(currentlyPlayingSongNumber)
     if (currentSoundFile.isPaused()){
@@ -185,7 +195,13 @@ var updateSeekBarWhileSongPlays = function(){
             updateSeekPercentage($seekBar, seekBarFillRatio);
         });
     }
-}
+
+    var setCurrentTimeInPlayerBar = function(currentTime){
+        var $currentTimeCell = $('.current-time');
+        $currentTimeCell = filterTimeCode(currentSoundFile.getTime());
+    };
+
+};
 
 var updateSeekPercentage = function($seekBar, seekBarFillRatio){
     var offsetXPercent = seekBarFillRatio * 100;
@@ -239,6 +255,9 @@ var setupSeekBars = function(){
 
     });
 }
+
+
+
 
 var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
 var pauseButtonTemplate = '<a class="album-song-button"><span class="ion-pause"></span></a>';
